@@ -6,7 +6,6 @@ import os
 
 st.set_page_config(
     page_title="Aritmética de características",
-    page_icon="🧬",
     layout="centered"
 )
 
@@ -47,21 +46,14 @@ def load_data():
     
     netG = Generator(ngpu=0).to(device)
     
-    if os.path.exists("netG_celeba_v1.pth"):
-        state_dict = torch.load("netG_celeba_v1.pth", map_location=device)
-        netG.load_state_dict(state_dict)
-        netG.eval()
-    else:
-        st.error("Erro: Arquivo do modelo (netG_celeba_v1.pth) não encontrado.")
-        return None, None
+    state_dict = torch.load("netG_celeba_v1.pth", map_location=device)
+    netG.load_state_dict(state_dict)
+    netG.eval()
 
     vetores = {}
-    try:
-        vetores['sorriso'] = torch.load("vetor_sorriso.pth", map_location=device)
-        vetores['loiro']   = torch.load("vetor_loiro.pth", map_location=device)
-        vetores['genero']  = torch.load("vetor_genero.pth", map_location=device)
-    except FileNotFoundError as e:
-        st.warning(f"Aviso: Algum vetor não foi encontrado ({e}). Aritmética parcial.")
+    vetores['sorriso'] = torch.load("vetor_sorriso.pth", map_location=device)
+    vetores['loiro']   = torch.load("vetor_loiro.pth", map_location=device)
+    vetores['genero']  = torch.load("vetor_genero.pth", map_location=device)
     
     return netG, vetores
 
